@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CSS Flag Project</title>
+  <style>
+    /* Write your CSS Code here */
+
+    /* Red box */
+    .flag{
+      background-color: red;
+      height: 600px;
+      width: 900px;
+      position: relative;
+    }
+
+
+    /* Blue box */
+    .flag > div{
+      background-color: blue;
+      height: 50%;  /* we can also use 300 px as it is half of the 600px */
+      width: 100%;
+      position: absolute;
+      top: 25%;
+
+    }
+    
+    /* White circle */
+    .flag > div > div{
+      background-color: white;
+      height: 200px;
+      width: 200px;
+      border-radius: 50%;
+      position: relative;
+      top: 50px; /* from the top by 50 px bcz we know that the height of the blue rectangle is 300px and half of it is 150px . So then as we know that the radius of the circle is 100 , as its height is 200px, then we know that in order for it to be in the centre , it needs to be 50 pixels from the top.*/
+      left: 350px; /* half of 900 is 450 and as 100 is the radius , we move it 350 from the left */
+    }
+
+    p{
+      margin: 0;
+      text-align: center;
+      font-size: 5rem;
+      color: white;
+    }
+
+    .flag > div > div > p{
+      color: black;
+    }
+
+
+    
+  </style>
+</head>
+
+<!-- 
+  IMPORTANT! Do not change any HTML
+Don't add any classes/ids/elements 
+Use what you know about combining selectors 
+and CSS specificity instead.
+Hint 1: The flag is 900px by 600px and the circle is 200px by 200px.
+Hint 2: You can use CSS inspection to get the colors from
+https://appbrewery.github.io/flag-of-laos/
+-->
+
+<body>
+  <div class="flag">
+    <p>The Flag</p>
+    <div>
+      <div>
+        <p>of Laos</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
