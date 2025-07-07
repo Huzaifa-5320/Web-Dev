@@ -33,7 +33,7 @@ function checkAnswer(currentLevel) {
             setTimeout(function() {
                 nextSequence();
             }, 1000);
-            userClickedPattern = [];
+        
         }
     } else {
         // console.log("wrong");
@@ -62,8 +62,7 @@ function nextSequence() {
 
     $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100); 
 
-    playsound(randomChosenColour);
-
+    playSound(randomChosenColour);
 };
 
 function playSound(name) {
