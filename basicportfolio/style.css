@@ -1,0 +1,22 @@
+h1{
+    font-family: Delius Swash Caps, cursive;
+    color: yellow;
+}
+
+p {
+  color: silver;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.profile-bg {
+  background-image: url('./headerbackg.png'); /* or use background-color */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat; 
+  padding: 2rem;
+}
+
+
+
+
