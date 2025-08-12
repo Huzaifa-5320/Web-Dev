@@ -19,11 +19,8 @@ app.get("/jokes/:id", (req, res) => {
   const jokeId = parseInt(req.params.id, 10);
   const joke = jokes.find(j => j.id === jokeId);
   
-  if (joke) {
-    res.json(joke);
-  } else {
-    res.status(404).send("Joke not found");
-  }
+  joke ? res.json(joke) : res.status(404).send("Joke not found");
+
 });
 
 //3. GET a jokes by filtering on the joke type
@@ -47,14 +44,72 @@ app.get("/filter", (req, res) => {
 });
 
 //4. POST a new joke
+app.post("/jokes", (req,res) => {
+  const newJoke = {
+    id: jokes.length + 1,
+    jokeText: req.body.text,
+    jokeType: req.body.type
+  }
+  jokes.push(newJoke);
+  console.log(jokes.slice(-1));
+  res.json(newJoke);
+});
 
 //5. PUT a joke
+app.put("/jokes/:id", (req,res) => {
+  const jokeId = parseInt(req.params.id, 10);
+  const jokeIndex = jokes.findIndex(j => j.id === jokeId);
+  if (jokeIndex !== -1) {
+    const updatedJoke = {
+      id: jokeId,
+      jokeText: req.body.text,
+      jokeType: req.body.type
+    };
+    jokes[jokeIndex] = updatedJoke;
+    res.json(updatedJoke);
+  } else {
+    res.status(404).send("Joke not found");
+  }
+})
 
 //6. PATCH a joke
+app.patch("/jokes/:id", (req, res) => {
+  const jokeId = parseInt(req.params.id, 10);
+  const jokeIndex = jokes.findIndex(j => j.id === jokeId);
+  
+  if (jokeIndex !== -1) {
+    const updatedJoke = { ...jokes[jokeIndex], ...req.body };
+    jokes[jokeIndex] = updatedJoke;
+    res.json(updatedJoke);
+  } else {
+    res.status(404).send("Joke not found");
+  }
+});
 
 //7. DELETE Specific joke
+app.delete("/jokes/:id", (req, res) => {
+  const jokeId = parseInt(req.params.id, 10);
+  const jokeIndex = jokes.findIndex(j => j.id === jokeId);
+  if (jokeIndex !== -1) {
+    jokes.splice(jokeIndex, 1);
+    res.status(200).send();
+  } else {
+    res.status(404).send("Joke not found");
+  }
+});
+    
 
 //8. DELETE All jokes
+app.delete("/all",(req, res) => {
+  const masterKeyHeader = req.headers["x-master-key"];
+  if (masterKeyHeader !== masterKey) {
+    return res
+    .status(403)
+    .json({error:`You are not authorised to perform this action.`});
+  }
+  jokes = [];
+  res.status(200).send("All jokes deleted successfully.");  
+});
 
 app.listen(port, () => {
   console.log(`Successfully started server on port ${port}.`);
