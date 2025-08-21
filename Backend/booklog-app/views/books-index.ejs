@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Huzaifa Ali — Books I've Read</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Huzaifa Ali</h1>
+    <p class="subtitle">Books I’ve Read</p>
+  </header>
+
+  <main>
+    <ul class="grid">
+      <% books.forEach(b => { %>
+        <li class="card">
+          <% if (b.isbn13 || b.isbn10) { %>
+            <img 
+              src="https://covers.openlibrary.org/b/isbn/<%= b.isbn13 || b.isbn10 %>-M.jpg?default=false" 
+              alt="Cover of <%= b.title %>" />
+          <% } %>
+          <div class="meta">
+            <h3><%= b.title %></h3>
+            <p class="author"><%= b.author %></p>
+            <% if (b.rating) { %><p class="rating"><%= b.rating %>/10</p><% } %>
+            <% if (b.summary) { %><p class="summary"><%= b.summary %></p><% } %>
+          </div>
+        </li>
+      <% }) %>
+    </ul>
+  </main>
+</body>
+</html>
