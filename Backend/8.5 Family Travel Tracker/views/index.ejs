@@ -387,13 +387,19 @@
   </section>
   <h2 class="total-count">Total Countries: <%=total%>
   </h2>
-  <script>
-    const country_codes = "<%= countries %>".split(",")
-    console.log(typeof ("<%= countries %>"))
-    country_codes.forEach(code => {
-      document.getElementById(code).style.fill = "<%= color %>"
-    });
-  </script>
+<script>
+  const country_codes = <%- JSON.stringify(countries) %>;
+  const color = "<%= color %>";
+
+  console.log(country_codes); // Debug
+  country_codes.forEach(code => {
+    const el = document.getElementById(code);
+    if (el) {
+      el.style.fill = color;
+    }
+  });
+</script>
+
 </body>
 
 </html>
