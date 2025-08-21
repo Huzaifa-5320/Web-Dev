@@ -35,7 +35,7 @@ async function checkVisited(userId) {
 
 app.get("/", async (req, res) => {
   const countries = await checkVisited(currentUserId);
-  const user = users.find(u => u.id === currentUserId);
+  const user = users.find(u => u.id === currentUserId) || users[0];
 
   res.render("index.ejs", {
     countries: countries,
@@ -107,24 +107,48 @@ app.post("/add", async (req, res) => {
 });
 
 
-app.post("/user", async (req, res) => {
-  const userId = parseInt(req.body.user); // comes from form
-  currentUserId = userId;
-
-  const countries = await checkVisited(currentUserId);
-  const user = users.find(u => u.id === currentUserId);
-
-  res.render("index.ejs", {
-    countries: countries,
-    total: countries.length,
-    users: users,
-    color: user.color
-  });
+app.post("/user", (req, res) => {
+  if (req.body.add === "new") {
+    res.render("new.ejs");
+  } else {
+    currentUserId = parseInt(req.body.user);
+    res.redirect("/");
+  }
 });
+
 
 app.post("/new", async (req, res) => {
   //Hint: The RETURNING keyword can return the data that was inserted.
   //https://www.postgresql.org/docs/current/dml-returning.html
+  const { name,color } = req.body;
+
+  // Simple validation
+  if (!name || !color) {
+    return res.render("new.ejs", { error: "Please provide both name and color." });
+  }
+
+  try {
+    // Insert into DB and get the new user's ID
+    const result = await db.query(
+      "INSERT INTO users (name, color) VALUES ($1, $2) RETURNING id, name, color",
+      [name, color]
+    );
+
+    const newUser = result.rows[0];
+
+    // Update local users array
+    users.push(newUser);
+
+    // Set current user to this new one
+    currentUserId = newUser.id;
+
+    // Redirect back to home
+    res.redirect("/");
+  } catch (err) {
+    console.error("Error adding new user:", err);
+    res.render("new.ejs", { error: "Something went wrong. Try again." });
+  }
+  
 });
 
 app.listen(port, () => {
