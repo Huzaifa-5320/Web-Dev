@@ -130,7 +130,7 @@ app.post("/new", async (req, res) => {
   try {
     // Insert into DB and get the new user's ID
     const result = await db.query(
-      "INSERT INTO users (name, color) VALUES ($1, $2) RETURNING id, name, color",
+      "INSERT INTO users (name, color) VALUES ($1, $2) RETURNING *",
       [name, color]
     );
 
