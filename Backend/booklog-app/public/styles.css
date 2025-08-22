@@ -42,22 +42,22 @@ header .subtitle {
 .grid {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1.5rem;
-  width: 100%;
-  max-width: 1000px;
+  grid-template-columns: repeat(2, minmax(600px, 1fr)); /* wider cards */
+  gap: 2rem;
+  max-width: 1100px; /* increase container width */
 }
 
 .card {
-  background: var(--card-bg);
-  border-radius: var(--radius);
-  box-shadow: 0 6px 16px var(--card-shadow);
-  padding: 1rem;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: space-between;
+  min-height: 500px;
+  padding: 1.5rem; /* a little more inner space */
+  border-radius: var(--radius);
+  background: var(--card-bg);
+  box-shadow: 0 6px 16px var(--card-shadow);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -76,7 +76,7 @@ header .subtitle {
 }
 
 .meta {
-  text-align: center;
+  flex-grow: 1; /* fills space so actions stay low */
 }
 
 .meta h3 {
@@ -104,9 +104,7 @@ header .subtitle {
 }
 
 .actions {
-  margin-top: 1rem;
-  display: flex;
-  gap: 0.6rem;
+  margin-top: auto; /* sticks buttons at bottom */
 }
 
 .btn {

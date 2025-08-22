@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Huzaifa Ali — Books I've Read</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
+
 <body>
   <header>
     <h1>Huzaifa Ali</h1>
@@ -13,22 +15,43 @@
 
   <main>
     <ul class="grid">
-      <% books.forEach(b => { %>
+      <% books.forEach(b=> { %>
         <li class="card">
           <% if (b.isbn13 || b.isbn10) { %>
-            <img 
-              src="https://covers.openlibrary.org/b/isbn/<%= b.isbn13 || b.isbn10 %>-M.jpg?default=false" 
+            <img src="https://covers.openlibrary.org/b/isbn/<%= b.isbn13 || b.isbn10 %>-M.jpg?default=false"
               alt="Cover of <%= b.title %>" />
-          <% } %>
-          <div class="meta">
-            <h3><%= b.title %></h3>
-            <p class="author"><%= b.author %></p>
-            <% if (b.rating) { %><p class="rating"><%= b.rating %>/10</p><% } %>
-            <% if (b.summary) { %><p class="summary"><%= b.summary %></p><% } %>
-          </div>
+            <% } %>
+              <div class="meta">
+                <h3>
+                  <%= b.title %>
+                </h3>
+                <p class="author">
+                  <%= b.author %>
+                </p>
+                <% if (b.rating) { %>
+                  <p class="rating">
+                    <%= b.rating %>/10
+                  </p>
+                  <% } %>
+                    <% if (b.summary) { %>
+                      <p class="summary">
+                        <%= b.summary %>
+                      </p>
+                      <% } %>
+              </div>
+
+              <div class="actions">
+                <% if (b.notes) { %>
+                  <a href="/notes/<%= b.id %>" class="btn">Read Notes</a>
+                  <% } %>
+                    <a href="/edit/<%= b.id %>" class="btn">Edit</a>
+                    <a href="/delete/<%= b.id %>" class="btn">Delete</a>
+              </div>
+
         </li>
-      <% }) %>
+        <% }) %>
     </ul>
   </main>
 </body>
+
 </html>
