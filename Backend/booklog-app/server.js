@@ -78,6 +78,28 @@ app.post("/delete/:id", async (req, res) => {
   }
 });
 
+app.get("/add", (req, res) => {
+  res.render("books-add");
+});
+
+app.post("/add", async (req, res) => {
+  const { title, author, isbn10, isbn13, rating, summary, notes, finished_at } = req.body;
+
+  try {
+    await db.query(
+      `INSERT INTO books (title, author, isbn10, isbn13, rating, summary, notes, finished_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [title, author, isbn10 || null, isbn13 || null, rating || null, summary || null, notes || null, finished_at || null]
+    );
+
+    res.redirect("/");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Database error while adding book");
+  }
+});
+
+
 
 
 const port = 3000;
