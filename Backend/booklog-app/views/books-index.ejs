@@ -21,41 +21,47 @@
         <li class="card">
           <% if (b.isbn13 || b.isbn10) { %>
             <img src="https://covers.openlibrary.org/b/isbn/<%= b.isbn13 || b.isbn10 %>-M.jpg?default=false"
-              alt="Cover of <%= b.title %>" />
-            <% } %>
-              <div class="meta">
-                <h3>
-                  <%= b.title %>
-                </h3>
-                <p class="author">
-                  <%= b.author %>
-                </p>
-                <% if (b.rating) { %>
-                  <p class="rating">
-                    <%= b.rating %>/10
+              alt="Cover of <%= b.title %>" onerror="this.onerror=null;this.src='/images/no-cover.png';" />
+            <% } else { %>
+              <img src="/images/no-cover.png" alt="No cover available" />
+              <% } %>
+
+                <div class="meta">
+                  <h3>
+                    <%= b.title %>
+                  </h3>
+                  <p class="author">
+                    <%= b.author %>
                   </p>
-                  <% } %>
-                    <% if (b.summary) { %>
-                      <p class="summary">
-                        <%= b.summary %>
-                      </p>
-                      <% } %>
-              </div>
 
-              <div class="actions">
-                <% if (b.notes) { %>
-                  <a href="/notes/<%= b.id %>" class="btn">Read Notes</a>
-                  <% } %>
-                    <a href="/edit/<%= b.id %>" class="btn">Edit</a>
-                     <a href="/delete/<%= b.id %>" class="btn delete-link" data-title="<%= b.title %>">Delete</a>
+                  <% if (b.rating) { %>
+                    <p class="rating">
+                      <%= b.rating %>/10
+                    </p>
+                    <% } %>
 
-              </div>
+                      <% if (b.notes && b.notes.trim().length> 0) { %>
+                        <p class="notes-preview">
+                          <%= b.notes.length> 100 ? b.notes.substring(0, 230) + '...' : b.notes %>
+                        </p>
+                        <% } %>
+                </div>
+
+
+                <div class="actions">
+                  <% if (b.notes) { %>
+                    <a href="/notes/<%= b.id %>" class="btn">Read Notes</a>
+                    <% } %>
+                      <a href="/edit/<%= b.id %>" class="btn">Edit</a>
+                      <a href="/delete/<%= b.id %>" class="btn delete-link" data-title="<%= b.title %>">Delete</a>
+
+                </div>
 
         </li>
         <% }) %>
     </ul>
   </main>
-    <!-- Delete Confirmation Modal -->
+  <!-- Delete Confirmation Modal -->
   <div id="deleteModal" class="modal">
     <div class="modal-content">
       <h2>Confirm Delete</h2>
@@ -66,33 +72,33 @@
       </div>
     </div>
   </div>
-<script>
-  const modal = document.getElementById("deleteModal");
-  const cancelBtn = document.getElementById("cancelBtn");
-  const confirmDelete = document.getElementById("confirmDelete");
+  <script>
+    const modal = document.getElementById("deleteModal");
+    const cancelBtn = document.getElementById("cancelBtn");
+    const confirmDelete = document.getElementById("confirmDelete");
 
-  document.querySelectorAll(".delete-link").forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const bookTitle = link.dataset.title;
-      const deleteUrl = link.getAttribute("href");
+    document.querySelectorAll(".delete-link").forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const bookTitle = link.dataset.title;
+        const deleteUrl = link.getAttribute("href");
 
-      document.getElementById("modalMessage").textContent = 
-        `Are you sure you want to delete "${bookTitle}"?`;
+        document.getElementById("modalMessage").textContent =
+          `Are you sure you want to delete "${bookTitle}"?`;
 
-      confirmDelete.setAttribute("href", deleteUrl);
-      modal.style.display = "flex";
+        confirmDelete.setAttribute("href", deleteUrl);
+        modal.style.display = "flex";
+      });
     });
-  });
 
-  cancelBtn.addEventListener("click", () => {
-    modal.style.display = "none";
-  });
+    cancelBtn.addEventListener("click", () => {
+      modal.style.display = "none";
+    });
 
-  window.addEventListener("click", e => {
-    if (e.target === modal) modal.style.display = "none";
-  });
-</script>
+    window.addEventListener("click", e => {
+      if (e.target === modal) modal.style.display = "none";
+    });
+  </script>
 </body>
 
 </html>

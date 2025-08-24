@@ -44,17 +44,15 @@ app.post("/edit/:id", async (req, res) => {
            isbn10 = $3,
            isbn13 = $4,
            rating = $5,
-           summary = $6,
-           notes = $7,
-           finished_at = $8
-       WHERE id = $9`,
+           notes = $6,
+           finished_at = $7
+       WHERE id = $8`,
       [
         title,
         author,
         isbn10 || null,
         isbn13 || null,
         rating || null,
-        summary || null,
         notes || null,
         finished_at || null,
         id
@@ -85,11 +83,16 @@ app.get("/add", (req, res) => {
 app.post("/add", async (req, res) => {
   const { title, author, isbn10, isbn13, rating, summary, notes, finished_at } = req.body;
 
+  // Validate ISBN-13
+  if (!isbn13 || !/^\d{13}$/.test(isbn13)) {
+  return res.status(400).send('ISBN-13 is required and must be 13 digits.');
+  }
+
   try {
     await db.query(
-      `INSERT INTO books (title, author, isbn10, isbn13, rating, summary, notes, finished_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [title, author, isbn10 || null, isbn13 || null, rating || null, summary || null, notes || null, finished_at || null]
+      `INSERT INTO books (title, author, isbn10, isbn13, rating, notes, finished_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [title, author, isbn10 || null, isbn13 || null, rating || null,notes || null, finished_at || null]
     );
 
     res.redirect("/");
@@ -99,6 +102,25 @@ app.post("/add", async (req, res) => {
   }
 });
 
+app.get("/notes/:id", async (req, res) => {
+  const bookId = req.params.id;
+  try {
+    const result = await db.query(
+      "SELECT id, title, author, notes FROM books WHERE id = $1",
+      [bookId]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).send("Book not found");
+    }
+
+    const book = result.rows[0];
+    res.render("book-notes", { book });
+  } catch (err) {
+    console.error("Error fetching notes:", err);
+    res.status(500).send("Internal server error");
+  }
+});
 
 
 
