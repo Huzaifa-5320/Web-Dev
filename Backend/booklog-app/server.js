@@ -72,7 +72,7 @@ app.post("/delete/:id", async (req, res) => {
     res.redirect("/");
   } catch (err) {
     console.error(err);
-    res.status(500).send("Database error");
+    res.status(500).send("Database error while deleting book.");
   }
 });
 
